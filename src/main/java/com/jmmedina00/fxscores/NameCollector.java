@@ -2,6 +2,9 @@ package com.jmmedina00.fxscores;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.jsoup.select.Selector;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -29,6 +32,11 @@ public class NameCollector {
 		String response = new String(inputStream.readAllBytes());
 
 		Document document = Jsoup.parse(response);
+		Elements links = Selector.select(".clear .list01 > li > a", document);
+
+		for (Element element : links) {
+			names.add(element.text());
+		}
 
 		return names;
 	}
