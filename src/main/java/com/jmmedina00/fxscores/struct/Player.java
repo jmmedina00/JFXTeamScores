@@ -1,5 +1,6 @@
 package com.jmmedina00.fxscores.struct;
 
+import net.sf.jsefa.csv.annotation.CsvDataType;
 import net.sf.jsefa.csv.annotation.CsvField;
 
 /**
@@ -9,6 +10,7 @@ import net.sf.jsefa.csv.annotation.CsvField;
  * This class cannot have a custom constructor since it's going to be
  * used in conjunction with JSefa.
  */
+@CsvDataType()
 public class Player implements Comparable<Player> {
 	@CsvField(pos = 1)
 	private String name;
