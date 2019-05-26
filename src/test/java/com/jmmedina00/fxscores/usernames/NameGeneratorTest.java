@@ -43,7 +43,6 @@ public class NameGeneratorTest {
 
 				for (int y = 0; y < uniqueNames; y++) {
 					String name = ng.createUserName();
-					System.out.println(name);
 					names.add(name);
 				}
 

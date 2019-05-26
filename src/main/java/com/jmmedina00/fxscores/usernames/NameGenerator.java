@@ -35,8 +35,8 @@ public class NameGenerator {
 				/* This one splits the group of tokens in two with an underscore,
 				   and the first letter of each group might come out capitalised
 				   Example: "adj ective composed noun" could become
-				   "Adjective_Composednoun_" or "adjective_composednoun_".
-				   Still to be tested. */
+				   "Adjective_Composednoun_" or "adjective_composednoun_"
+				*/
 				public String stylize(String[] tokens) {
 					String username = "";
 					int capitalise = (int) (Math.random() * 2);
@@ -57,6 +57,55 @@ public class NameGenerator {
 					}
 
 					return username.replaceFirst("^_", "") + "_";
+				}
+			},
+			new NameStylizer() {
+				@Override
+				/* This one combines all tokens, capitalising the first and
+				   and last letter of the resulting string, and replacing several
+				   letters.
+				*/
+				public String stylize(String[] tokens) {
+					String old = "aeiots", replacing = "431075",
+							username = "";
+					for (String singleToken : tokens) {
+						username += singleToken;
+					}
+
+					username = username.substring(0, 1).toUpperCase()
+							+ username.substring(1, username.length() - 1).toLowerCase()
+							+ username.substring(username.length() - 1).toUpperCase();
+
+					for (int x = 0; x < old.length(); x++) {
+						username = username.replace(
+								old.charAt(x),
+								replacing.charAt(x)
+						);
+					}
+
+					return username + "_"; //The underscore is for the possible year
+				}
+			},
+			new NameStylizer() {
+				@Override
+				/* This one puts every even character (starting to count from 0)
+				   in uppercase and puts the rest in lower case.
+				*/
+				public String stylize(String[] tokens) {
+					String combined = "", username = "";
+					for (String singleToken : tokens) {
+						combined += singleToken;
+					}
+
+					for (int x = 0; x < combined.length(); x++) {
+						if (x % 2 == 0) {
+							username += Character.toUpperCase(combined.charAt(x));
+						} else {
+							username += Character.toLowerCase(combined.charAt(x));
+						}
+					}
+
+					return username;
 				}
 			}
 	};
