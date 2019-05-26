@@ -3,6 +3,11 @@ package com.jmmedina00.fxscores.struct;
 import net.sf.jsefa.csv.annotation.CsvDataType;
 import net.sf.jsefa.csv.annotation.CsvField;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 /**
  * Class for Players in each team. As teams will be placed in a list,
  * each player gets their team no. as an attribute, in order to be able to find it quicker.
@@ -61,5 +66,33 @@ public class Player implements Comparable<Player> {
 		}
 
 		return comparison;
+	}
+
+	/**
+	 * Finds itself in a generated list of all players of all given teams,
+	 * then returns its position in it (starting by 1).
+	 *
+	 * @param teamList A list with all the teams
+	 * @return Its position between all the players, 0 if it couldn't find itself.
+	 */
+	public int getGlobalPosition(List<Team> teamList) {
+		SortedSet<Player> allPlayers = new TreeSet<>();
+		for (Team team : teamList) {
+			allPlayers.addAll(team);
+		}
+
+		int position = -1;
+		if (allPlayers.contains(this)) {
+			boolean searching = true;
+			Iterator<Player> iterator = allPlayers.iterator();
+
+			while (iterator.hasNext() && searching) {
+				Player player = iterator.next();
+				searching = (compareTo(player) != 0);
+				position++;
+			}
+		}
+
+		return position + 1;
 	}
 }

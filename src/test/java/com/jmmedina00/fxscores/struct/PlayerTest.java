@@ -95,4 +95,44 @@ public class PlayerTest {
 			fail(e.getMessage());
 		}
 	}
+
+	@Test
+	public void globalPositionTest() {
+		List<Team> teams = Arrays.asList(
+				new Team("One"),
+				new Team("Two"),
+				new Team("Three"),
+				new Team("Four")
+				);
+		//Players will be also stored in order to get to pick one randomly.
+		ArrayList<Player> players = new ArrayList<>();
+
+		for (int x = 30; x >= 1; x--) {
+			Player player = new Player();
+			player.setName(String.valueOf(Math.random() * Double.MAX_VALUE));
+			player.setTeam((int) (Math.random() * 4));
+			player.setScore(x);
+
+			teams.get(player.getTeam()).add(player);
+			players.add(player);
+		}
+
+		/*
+		   Now, scores should be like this (reduced in order to show it more quickly):
+		   1. 3
+		   2. 2
+		   3. 1
+
+		   So the position they should get is: (number of players) - (number of points) + 1
+		*/
+
+		for (int x = 0; x < 100; x++) {
+			int selectedIndex = (int) (Math.random() * 30);
+			Player player = players.get(selectedIndex);
+
+			assertEquals(30 - player.getScore() + 1,
+					player.getGlobalPosition(teams));
+		}
+
+	}
 }
