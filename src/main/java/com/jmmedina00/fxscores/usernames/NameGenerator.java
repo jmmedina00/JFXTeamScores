@@ -40,17 +40,23 @@ public class NameGenerator {
 				public String stylize(String[] tokens) {
 					String username = "";
 					int capitalise = (int) (Math.random() * 2);
+					int half = tokens.length / 2;
 
 					for (int x = 0; x < tokens.length; x++) {
-						if ((x == 0 || x == tokens.length / 2) && capitalise == 1) {
-							username += "_" + tokens[x].substring(0, 1).toUpperCase() +
-									tokens[x].substring(1);
+						if (x == 0 || x == half) {
+							username += "_";
+							if (capitalise == 1 && tokens[x].length() > 1) {
+								username += tokens[x].substring(0, 1).toUpperCase() +
+										tokens[x].substring(1);
+							} else {
+								username += tokens[x];
+							}
 						} else {
 							username += tokens[x];
 						}
 					}
 
-					return username;
+					return username.replaceFirst("^_", "") + "_";
 				}
 			}
 	};
