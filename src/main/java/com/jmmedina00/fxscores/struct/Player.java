@@ -1,5 +1,7 @@
 package com.jmmedina00.fxscores.struct;
 
+import net.sf.jsefa.csv.annotation.CsvField;
+
 /**
  * Class for Players in each team. As teams will be placed in a list,
  * each player gets their team no. as an attribute, in order to be able to find it quicker.
@@ -8,8 +10,14 @@ package com.jmmedina00.fxscores.struct;
  * used in conjunction with JSefa.
  */
 public class Player implements Comparable<Player> {
+	@CsvField(pos = 1)
 	private String name;
-	private int team, score;
+
+	@CsvField(pos = 2)
+	private int team;
+
+	@CsvField(pos = 3)
+	private int score;
 
 	public String getName() {
 		return name;
