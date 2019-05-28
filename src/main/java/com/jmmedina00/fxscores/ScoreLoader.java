@@ -2,18 +2,27 @@ package com.jmmedina00.fxscores;
 
 import com.jmmedina00.fxscores.struct.Player;
 import com.jmmedina00.fxscores.struct.Team;
+import com.jmmedina00.fxscores.usernames.NameGenerator;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import net.sf.jsefa.Serializer;
+import net.sf.jsefa.csv.CsvIOFactory;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
+import java.util.Scanner;
+
+import net.sf.extjwnl.*;
 
 /**
  * Controller class for the main form.
  */
 public class ScoreLoader {
-	private File playerData = null, teamsNames = null;
+	private NameGenerator nameGenerator = null;
+	private File playerData = null, teamNames = null;
 
 	@FXML
 	private Button btnShowAll, btnLoadPlayers, btnLoadTeamNames, btnLoadFiles,
@@ -38,9 +47,18 @@ public class ScoreLoader {
 	@FXML
 	private TableColumn<Player, String> tcPlayerName, tcGlobalPosOrTeam, tcPlayerScore;
 
+	public void initialize() {
+		//NameGenerator objects needed to load the default dictionary.
+		try {
+			nameGenerator = new NameGenerator();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void loadPlayers() {
-		teamsNames = openDialog(txtPathPlayers, false);
-		boolean disableButtons = (playerData == null || teamsNames == null);
+		teamNames = openDialog(txtPathPlayers, false);
+		boolean disableButtons = (playerData == null || teamNames == null);
 
 		btnLoadFiles.setDisable(disableButtons);
 		btnGenerate.setDisable(disableButtons);
@@ -48,7 +66,7 @@ public class ScoreLoader {
 
 	public void loadTeamNames() {
 		playerData = openDialog(txtPathTeamNames, true);
-		boolean disableButtons = (playerData == null || teamsNames == null);
+		boolean disableButtons = (playerData == null || teamNames == null);
 
 		btnLoadFiles.setDisable(disableButtons);
 		btnGenerate.setDisable(disableButtons);
@@ -74,5 +92,37 @@ public class ScoreLoader {
 		}
 
 		return selected;
+	}
+
+	/* INCOMPLETE */
+	public void generate() {
+		int teams = 0;
+		int players = (int) ((Math.random() * 26) + 50);
+		Scanner teamCounter = null;
+		Writer playerDataWriter = null;
+		Serializer serializer = CsvIOFactory.createFactory(Player.class).
+				createSerializer();
+
+		try {
+			teamCounter = new Scanner(teamNames);
+			while (teamCounter.hasNext()) {
+				String notUsedTeamName = teamCounter.nextLine();
+				teams++;
+			}
+
+			playerDataWriter = new FileWriter(playerData);
+			serializer.open(playerDataWriter);
+
+			for (int x = 0; x < players; x++) {
+				Player player = new Player();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			lblStatus.setText(e.getMessage());
+		} finally {
+			if (teamCounter != null) {
+				teamCounter.close();
+			}
+		}
 	}
 }
